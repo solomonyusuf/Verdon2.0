@@ -1,0 +1,50 @@
+﻿@page "/tutor-editquestion-{Id}"
+@using Microsoft.EntityFrameworkCore;
+@model Verdon.Pages.Components.Tutor.Quiz.TutorEditQuestionModel
+@inject ApplicationDbContext _context;
+@{
+    Layout = "_MainLayout";
+}
+
+<div class="card">
+<form method="post" class="card-body">
+        <a class="btn btn-outline-primary" href="/tutor-modifyquiz-@Model.question.QuizId">Back</a><br />
+        <div class="row">
+            <div class="col mb-3">
+                <label for="nameBasic" class="form-label">Question Title</label>
+                <textarea required asp-for="question.Content" type="text" id="nameBasic" class="form-control" placeholder="Enter Description">@Model.question.Content</textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col mb-3">
+                <label for="nameBasic" class="form-label">Alphabet Answer</label>
+            <input required asp-for="question.Aplhabet" value="@Model.question.Aplhabet" type="text" id="nameBasic" class="form-control" placeholder="Enter Question Answer Alphabet " />
+                <input required asp-for="question.QuizId" value="@Model.quiz.Id" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Duration" />
+            <input required asp-for="question.Id" value="@Model.question.Id" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Duration" />
+            </div>
+        </div>
+        <h5 class="modal-title" id="exampleModalLabel1">New Option</h5><br />
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <label for="nameBasic" class="form-label">Option A</label>
+                <input value="@Model.options[0].Content" required asp-for="option_1" type="text" id="nameBasic" class="form-control" placeholder="Enter Option A " />
+            </div>
+            <div class="col-sm-6 mb-3">
+                <label for="nameBasic" class="form-label">Option B</label>
+                <input value="@Model.options[1].Content" required asp-for="option_2" type="text" id="nameBasic" class="form-control" placeholder="Enter Option B " />
+            </div>
+            <div class="col-sm-6 mb-3">
+                <label for="nameBasic" class="form-label">Option C</label>
+                <input value="@Model.options[2].Content" required asp-for="option_3" type="text" id="nameBasic" class="form-control" placeholder="Enter Option C " />
+            </div>
+            <div class="col-sm-6 mb-3">
+                <label for="nameBasic" class="form-label">Option D</label>
+                <input value="@Model.options[3].Content" required asp-for="option_4" type="text" id="nameBasic" class="form-control" placeholder="Enter Option D " />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+
+</form>
+</div>

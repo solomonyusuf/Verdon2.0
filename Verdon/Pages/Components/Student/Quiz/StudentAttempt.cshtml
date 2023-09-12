@@ -1,0 +1,205 @@
+﻿@page "/begin-quiz-{Id}"
+@using Verdon.Models.Auth;
+@inject ApplicationDbContext _context;
+@model Verdon.Pages.Components.Student.Quiz.StudentAttemptModel
+@{
+    Layout = "_MainLayout";
+    int Key = 1;
+    int Count = 1;
+}
+@functions{
+
+    async Task<VerdonUser> GetUser(string Id)
+    {
+        return await _context.User.FindAsync(Id);
+    }
+}
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Modify</span> Quiz</h4>
+
+
+<div class="row">
+    <!-- Basic Layout -->
+    <div class="col-xxl">
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Quiz Publishing</h5>
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <form action="/tutor-publishquiz-@Model.quiz.Id" method="get">
+                        <label for="nameBasic" class="form-label">Publish (@Model.quiz.Publish)</label>
+                        <select name="status" required class="form-control">
+                            <option selected>Select one</option>
+                            <option value="1">True</option>
+                            <option value="0">False</option>
+                        </select>
+                        <button style="margin:8px;" type="submit" class="btn btn-primary">Publish</button>
+                    </form>
+                </div>
+            </div>
+                    <div class="card-body">
+                        <h5>Quiz Question</h5>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="mt-3">
+                                <!-- Button trigger modal -->
+                                <button type="button"
+                                        class="btn btn-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#basicModal">
+                                    New Question
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <form method="post" class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel1">New Question</h5>
+                                                <button type="button"
+                                                        class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div class="row">
+                                                    <div class="col mb-3">
+                                                        <label for="nameBasic" class="form-label">Question Title</label>
+                                                        <textarea required asp-for="question.Content" type="text" id="nameBasic" class="form-control" placeholder="Enter Description"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col mb-3">
+                                                        <label for="nameBasic" class="form-label">Alphabet Answer</label>
+                                                        <input required asp-for="question.Aplhabet" type="text" id="nameBasic" class="form-control" placeholder="Enter Question Answer Alphabet " />
+                                                        <input required asp-for="question.QuizId" value="@Model.quiz.Id" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Duration" />
+                                                    </div>
+                                                </div>
+                                                <h5 class="modal-title" id="exampleModalLabel1">New Option</h5><br />
+                                                <div class="row">
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label for="nameBasic" class="form-label">Option A</label>
+                                                        <input required asp-for="option_1" type="text" id="nameBasic" class="form-control" placeholder="Enter Option A " />
+                                                    </div>
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label for="nameBasic" class="form-label">Option B</label>
+                                                        <input required asp-for="option_2" type="text" id="nameBasic" class="form-control" placeholder="Enter Option B " />
+                                                    </div>
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label for="nameBasic" class="form-label">Option C</label>
+                                                        <input required asp-for="option_3" type="text" id="nameBasic" class="form-control" placeholder="Enter Option C " />
+                                                    </div>
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label for="nameBasic" class="form-label">Option D</label>
+                                                        <input required asp-for="option_4" type="text" id="nameBasic" class="form-control" placeholder="Enter Option D " />
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <div class="card-body">
+                        <h5>Questions</h5>
+                        @foreach (var data in @Model.questions)
+                        {
+                            <div class="row" style="border:solid;padding:20px;margin:5px;border-width:3px;">
+                                <div class="col-md-1">
+                                    @(Key++)
+                                </div>
+                        <div class="col-md-10">
+                                    <div class="row">
+                                        @data.Content
+                                    </div>
+                                    <div class="row">
+                                        @foreach (var item in _context.Options.Where(x => x.QuestionId == data.Id).OrderBy(x => x.Alphabet).ToList())
+                                        {
+                                            <p>(@item.Alphabet)&nbsp;@item.Content</p>
+                                        }
+                                    </div>
+                                    <strong>Answer: (@data.Aplhabet)</strong>
+                                    <a href="/delete-question/@data.Id" class="btn btn-danger btn-sm text-white">Remove</a>
+                                    <a href="/tutor-editquestion-@data.Id" class="btn btn-primary btn-sm text-white">Edit</a>
+
+                                </div>
+
+                            </div>
+
+                            <br />
+                        }
+                    </div>
+                </div>
+                    </div>
+                </div>
+          
+    <!-- Basic with Icons -->
+    <div class="col-xxl">
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Quiz Results</h5>
+                <small class="text-muted float-end">score on attempts</small>
+            </div>
+            <div class="card-body">
+            @if (Model.result.Count() == 0)
+            {
+                
+                <div class="card-title d-flex align-items-start">
+                    <img align="center" src="~/blank.png" style="height:100px;" />
+                </div>
+                   
+            }
+            @if (Model.result.Count() > 0)
+            {
+
+                <div class="card">
+                    <h5 class="card-header"> (@Model.result.Count()) Available</h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-nowrap">
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var data in Model.result)
+                                {
+                                    <tr>
+                                        <th scope="row">@(Count++)</th>
+                                        <td><img style="height:100px;" src="@GetUser(data.VerdonUserId).Result.Image" /> @GetUser(data.VerdonUserId).Result.FirstName @GetUser(data.VerdonUserId).Result.LastName</td>
+                                        <td>@data.DateTime.ToShortDateString() @data.DateTime.ToShortTimeString()</td>
+                                    </tr>
+
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            }
+            </div>
+        </div>
+    </div>
+</div>
+          
+
+
+
+   
