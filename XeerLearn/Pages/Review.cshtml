@@ -1,0 +1,51 @@
+﻿@page "/tutor-student-reviews"
+@model XeerLearn.Pages.ReviewModel
+@using XeerLearn.Data;
+@using XeerLearn.Models.Auth;
+@inject ApplicationDbContext _context;
+@{
+    Layout = "_MainLayout";
+}
+@functions{
+
+    async Task<XeerLearnUser> GetUser(string Id)
+    {
+        return await _context.User.FindAsync(Id);
+    }
+}
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Students</span> Review</h4>
+
+
+@if (Model.reviews != null)
+{
+    @if (Model.reviews.Count() == 0)
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start">
+                    <img align="center" src="~/blank.png" style="height:100px;" />
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.reviews.Count() > 0)
+    {       
+
+            @foreach (var item in Model.reviews)
+            {
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="card-title d-flex align-items-start">
+                            <h5> <img src="@GetUser(item.XeerLearnUserId).Result.Image" style="height:100px;" />&nbsp;@GetUser(item.XeerLearnUserId).Result.Email</h5>
+                            <p>@item.Description</p>
+                        </div>
+                    </div>
+                </div>
+            }
+           
+        }
+
+
+
+}

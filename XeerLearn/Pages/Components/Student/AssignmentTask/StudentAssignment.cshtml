@@ -1,0 +1,60 @@
+﻿@page "/student-assignments"
+@model XeerLearn.Pages.Components.Student.AssignmentTask.StudentAssignmentModel
+@using XeerLearn.Models.Auth;
+@inject UserManager<XeerLearnUser> user
+@{
+    Layout = "_MainLayout";
+    int key = 1;
+}
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Student</span> Assignment</h4>
+
+@if (Model.assignments != null)
+{
+    @if (Model.assignments.Count() == 0)
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start">
+                    <img align="center" src="~/blank.png" style="height:100px;" />
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.assignments.Count() > 0)
+    {
+
+        <div class="card">
+            <h5 class="card-header"> (@Model.assignments.Count()) Assignment</h5>
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr class="text-nowrap">
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Due Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.assignments)
+                        {
+                            <tr>
+                                <th scope="row">@(key++)</th>
+                                <td>@data.Title</td>
+                                <td>@data.DueDate.ToLongDateString() @data.DueDate.ToShortTimeString()</td>
+                                <td><a href="/student-modifyassignment-@data.Id" class="btn btn-primary">View</a></td>
+                            </tr>
+
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    }
+}
+

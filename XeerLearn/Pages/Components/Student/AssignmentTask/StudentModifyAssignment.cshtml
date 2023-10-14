@@ -1,0 +1,70 @@
+﻿@page "/student-modifyassignment-{Id}"
+@using XeerLearn.Models.Auth;
+@inject ApplicationDbContext _context;
+@model XeerLearn.Pages.Components.Student.AssignmentTask.StudentModifyAssignmentModel
+@{
+    Layout = "_MainLayout";
+    int Key = 1;
+}
+@functions{
+
+    async Task<XeerLearnUser> GetUser(string Id)
+    {
+        return await _context.User.FindAsync(Id);
+    }
+}
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Modify</span> Assignment</h4>
+
+
+<div class="row">
+    <!-- Basic Layout -->
+    <div class="col-xxl">
+        <div class="card mb-4">
+                    <div class="card-body">
+                        <h5>Assignment Detail</h5>
+                        <div>
+                         @Model.assignment.Description  
+                        </div>
+                    </div>
+
+                </div>
+                    </div>
+                </div>
+          
+    <!-- Basic with Icons -->
+    <div class="col-xxl">
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Assignment Response</h5>
+                <small class="text-muted float-end">Response</small>
+            </div>
+            <div class="card-body">
+            @if (Model.response != null)
+            {
+                
+                <div class="card-title d-flex align-items-start">
+                    <img align="center" src="~/blank.png" style="height:100px;" />
+                </div>
+                   
+            }
+            else
+            {
+
+                <div>
+                    <div id="div_editor1" class="richtexteditor" style="width: 960px;margin:0 auto;">
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-primary">Save Changes</button>
+                        </div>
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+</div>
+          
+
+
+
+   

@@ -1,0 +1,224 @@
+﻿@page "/tutor-quiz"
+@model XeerLearn.Pages.Components.Tutor.TutorQuizModel
+@using Microsoft.EntityFrameworkCore;
+@using XeerLearn.Models.Auth;
+@using XeerLearn.Models.Utility;
+@inject ApplicationDbContext _context;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers;
+@inject UserManager<XeerLearnUser> user
+@{
+    var query = user.FindByEmailAsync(User.Identity.Name).Result;
+    Layout = "_MainLayout";
+    int key = 1;
+
+}
+@functions
+{
+    async Task<List<QuizResult>> GetAttempts(Guid Id)
+    {
+        return await _context.QuizResults.Where(x => x.QuizId == Id).ToListAsync();
+    }
+}
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tutor</span> Quiz</h4>
+
+<div class="col-lg-4 col-md-6">
+    <div class="mt-3">
+        <!-- Button trigger modal -->
+        <button type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#basicModal">
+            New Quiz
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form method="post" class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">New Quiz</h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Name</label>
+                                <input required asp-for="quiz.Title" type="text" id="nameBasic" class="form-control" placeholder="Enter Title" />
+                                <input required asp-for="quiz.XeerLearnUserId" value="@query.Id" hidden type="text" id="nameBasic" class="form-control" placeholder="" />
+                                <input required asp-for="quiz.AccessKeyId" value="@(Guid.Parse(HttpContext.Session.GetString("AccessKey")))" hidden type="text" id="nameBasic" class="form-control" placeholder="" />
+                             
+                        </div>
+
+                        
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Description</label>
+                                <textarea required asp-for="quiz.Title" type="text" id="nameBasic" class="form-control" placeholder="Enter Description"></textarea>
+                             </div>          
+                        </div>
+                       
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Point Score</label>
+                                <input required asp-for="quiz.PointScore" type="number" id="nameBasic" class="form-control" placeholder="Enter Score For Each Question" />
+                             </div>          
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Duration</label>
+                                <input required asp-for="quiz.Duration" type="number" id="nameBasic" class="form-control" placeholder="Enter Duration" />
+                             </div>          
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Starting Time</label>
+                                <input required asp-for="quiz.StartTime" type="datetime-local" id="nameBasic" class="form-control" />
+                             </div>          
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Submission Deadline</label>
+                                <input required asp-for="quiz.Deadline" type="datetime-local" id="nameBasic" class="form-control"/>
+                             </div>          
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Publish</label>
+                                <select disabled required asp-for="quiz.Publish" class="form-control">
+                                    <option>Select one</option>
+                                    <option value="1">True</option>
+                                    <option value="0" selected>False</option>
+                                </select>
+                             </div>          
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+@if (Model.quizzes != null)
+{
+    @if (Model.quizzes.Count() == 0)
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start">
+                    <img align="center" src="~/blank.png" style="height:100px;" />
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.quizzes.Count() > 0)
+    {
+
+      <div class="card" style="width:max-content;">
+            <div class="col-md-12">
+            <h5 class="card-header"> (@Model.quizzes.Count()) Quizzes Available</h5>
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr class="text-nowrap">
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Duration</th>
+                            <th>Published</th>
+                            <th>Attempts</th>
+                            <th>Start</th>
+                            <th>Deadline</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.quizzes)
+                        {
+                            <tr>
+                                <th scope="row">@(key++)</th>
+                                <td>@data.Title</td>
+                                <td>@data.Duration</td>
+                                <td>
+                                    @if(data.Publish == true)
+                                        {
+                                            <p> true </p>
+                                        }
+                                        else
+                                        {
+                                            <p>false</p>
+                                        }
+                                    </td>
+                                <td>
+                                    @if(GetAttempts(data.Id).Result != null)
+                                    {
+                                        <strong>@GetAttempts(data.Id).Result.Count()</strong>
+                                    }
+                                    else
+                                    {
+                                        <p>No attempts</p>
+                                    }
+
+                                </td>
+                                <td>@data.StartTime.ToShortDateString() @data.StartTime.ToShortTimeString()</td>
+                                    <td>@data.Deadline.ToShortDateString() @data.Deadline.ToShortTimeString()</td>
+                                <td><a href="/tutor-modifyquiz-@data.Id" class="btn btn-primary">Modify</a></td>
+                                <td>
+                                    <button type="button"
+                                            class="btn btn-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal@(key)">
+                                        Delete
+                                    </button>
+                                        <div class="modal fade" id="modal@(key)" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel1">Delete Quiz</h5>
+                                                    <button type="button"
+                                                            class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col mb-3">
+                                                            <label for="nameBasic" class="form-label">Are you sure you want to delete?</label>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                    <a href="/delete-quiz/@data.Id" class="text-white btn btn-primary">Delete</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                           
+                            </tr>
+
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+
+    }
+}

@@ -1,0 +1,45 @@
+﻿@page "/student-result-{Id}"
+@model XeerLearn.Pages.Components.Student.Quiz.StudentResultModel
+@{
+    Layout = "_QuizLayout";
+}
+<div class="col-xxl col-md-4">
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Student Result</h4>
+            <small class="text-muted float-end">Participant</small>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="mb-3">
+                    <div align="center" class="d-flex align-items-center align-items-sm-center gap-4">
+                        <img src="@Model.user.Image"
+                             alt="user-avatar"
+                             class="d-block rounded"
+                             height="100"
+                             width="100"
+                             id="uploadedAvatar" />
+
+                    </div>
+                </div>
+                <div>
+                    <h4> @Model.user.FirstName&nbsp;@Model.user.LastName</h4>
+                </div>
+               
+                <div class="mb-3">
+                    <small class="text-muted">@Model.user.Email</small>
+                </div>
+                <div class="mb-3">
+                    <small class="text-muted">@Model.user.Matric</small>
+                </div><br />
+                <div class="mb-3">
+                    <h3>@Model.result.Score</h3>
+                </div>
+                <div class="mb-3">
+                    <a class="btn btn-primary" href="/student-quiz">Back to Dashboard</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

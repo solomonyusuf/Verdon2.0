@@ -1,0 +1,42 @@
+﻿@page "/change-level/{Id}"
+@using XeerLearn.Data;
+@using XeerLearn.Models.Auth;
+@model XeerLearn.Areas.Identity.Pages.Account.TutorChangeLevelModel
+@inject ApplicationDbContext _context
+@inject UserManager<XeerLearnUser> _manager
+@{
+    var user = await _manager.FindByEmailAsync(User.Identity.Name);
+}
+<div class="container align-self-center mb-4" style="margin-top:100px;">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="rbt-contact-form contact-form-style-1 max-width-auto">
+                <h3 class="title">Change Tutor Level</h3>
+                <form method="post" enctype="multipart/form-data" class="max-width-auto">
+                 
+                    <div class="form-group">
+                        <select class="form-control-lg form-control" name="level">
+                            <option>Select level</option>
+                            @foreach(var data in _context.UserAccess.Where(x=> x.XeerLearnUserId == user.Id).ToList())
+                            {
+                                <option value="@data.AccessKeyId">@_context.AccessKeys.FindAsync(data.AccessKeyId).Result.Name</option>
+                            }
+                        </select>
+                        
+                        <span class="focus-border"></span>
+                    </div>
+                   
+                    <div class="form-submit-group">
+                        <button type="submit" class="rbt-btn btn-md btn-gradient hover-icon-reverse w-100">
+                            <span class="icon-reverse-wrapper">
+                                <span class="btn-text">Authorize</span>
+                                <span class="btn-icon"><i class="feather-arrow-right"></i></span>
+                                <span class="btn-icon"><i class="feather-arrow-right"></i></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

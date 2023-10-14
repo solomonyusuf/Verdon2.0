@@ -1,0 +1,164 @@
+﻿@page "/tutor-assignments"
+@model XeerLearn.Pages.Components.Tutor.TutorAssignmentModel
+@using XeerLearn.Models.Auth;
+@inject UserManager<XeerLearnUser> user
+@{
+    Layout = "_MainLayout";
+    int key = 1;
+}
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tutor</span> Assignment</h4>
+
+<div class="col-lg-4 col-md-6">
+    <div class="mt-3">
+        <!-- Button trigger modal -->
+        <button type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#basicModal">
+            New Assignment
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <form method="post" class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">New Assignment</h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Name</label>
+                                <input asp-for="assignment.Title" type="text" id="nameBasic" class="form-control" placeholder="Enter Title" />
+                                <input asp-for="assignment.XeerLearnUserId" value="@user.FindByEmailAsync(User.Identity.Name).Result.Id" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                                <input asp-for="assignment.AccessKeyId" value="@Model.Access" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Description</label>
+                                <textarea asp-for="assignment.Description" type="text" id="nameBasic" class="form-control" placeholder="Enter Assignment Here"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Total Score</label>
+                                <input asp-for="assignment.TotalScore" type="text" id="nameBasic" class="form-control" placeholder="Enter Total Score" />
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Assignment Due Date</label>
+                                <input asp-for="assignment.DueDate" type="datetime-local" id="nameBasic" class="form-control" />
+                            </div>
+
+                        </div>
+                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+@if (Model.assignments != null)
+{
+    @if (Model.assignments.Count() == 0)
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title d-flex align-items-start">
+                    <img align="center" src="~/blank.png" style="height:100px;" />
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.assignments.Count() > 0)
+    {
+
+        <div class="card">
+            <h5 class="card-header"> (@Model.assignments.Count()) Assignment Available</h5>
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr class="text-nowrap">
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Due Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.assignments)
+                        {
+                            <tr>
+                                <th scope="row">@(key++)</th>
+                                <td>@data.Title</td>
+                                <td>@data.DueDate.ToLongDateString() @data.DueDate.ToShortTimeString()</td>
+                                <td><a href="/tutor-modifyassignment-@data.Id" class="btn btn-primary">View</a></td>
+                                <td>
+                                    <button type="button"
+                                            class="btn btn-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#@data.Id">
+                                        Delete
+                                    </button>
+                                    <div class="modal fade" id="@data.Id" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel1">Delete Assignment</h5>
+                                                    <button type="button"
+                                                            class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col mb-3">
+                                                            <label for="nameBasic" class="form-label">Are you sure you want to delete?</label>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                    <a href="/delete-assignment/@data.Id" class="text-white btn btn-primary">Save changes</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    }
+}
+

@@ -1,0 +1,130 @@
+﻿@page "/tutor-libary"
+@model XeerLearn.Pages.Components.Tutor.TutorLibaryModel
+@using XeerLearn.Models.Auth;
+@inject UserManager<XeerLearnUser> user
+@{
+    var query = user.FindByEmailAsync(User.Identity.Name).Result;
+    Layout = "_MainLayout";
+    int key = 1;
+}
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tutor</span> Libary</h4>
+
+<div class="row">
+    <!-- Basic Layout -->
+    <div class="col-sm-5">
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="card-header">
+                        <h5 class="card-title">New Material</h5>
+                    </div>
+                    <div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="emailBasic" class="form-label">Material</label>
+                                <input hidden asp-for="type" value="upload" />
+                               
+                                <input name="files" multiple type="file" id="inputfile" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>      
+         </div>
+     </div>
+          
+    <!-- Basic with Icons -->
+    <div class="col-sm-7">
+        <div class="card mb-4">
+            @if (Model.materials != null)
+            {
+                @if (Model.materials.Count() == 0)
+                {
+                    
+                        <div class="card-body">
+                            <div class="card-title d-flex align-items-start">
+                                <img align="center" src="~/blank.png" style="height:100px;" />
+                            </div>
+                        </div>
+                    
+                }
+                @if (Model.materials.Count() > 0)
+                {
+
+                    <div class="card-body" style="height:700px;overflow:scroll;">
+                        <h5 class="card-header"> Materials Available</h5>
+
+                                    @foreach (var data in Model.materials)
+                                    {
+                                        <div class="row" style="border:solid;padding:5px;margin:5px;border-width:3px;">
+                                            <div class="card-title">
+                                                <div class="card-header">
+                                                    <a class="text" href="@data.File">
+                                            <img align="center" src="https://www.freeiconspng.com/uploads/pdf-icon-png-pdf-zum-download-2.png" style="height:40px;" /> @data.Name
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                   
+                                                    <button type="button"
+                                                            class="btn btn-danger btn-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#material@(key)">
+                                                        Delete
+                                                    </button>
+                                        <div class="modal fade" id="material@(key)" tabindex="-1" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <form method="post" class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel1">Delete Lecture</h5>
+                                                                    <button type="button"
+                                                                            class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col mb-3">
+                                                                            <label for="nameBasic" class="form-label">Are you sure you want to delete?</label>
+                                                                            <input hidden asp-for="type" value="delete"/>
+                                                                             <input hidden asp-for="Id" value="@data.Id" />
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                                        Close
+                                                                    </button>
+                                                                    <button class="text-white btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <small>@data.Author </small> |
+                                                    <small> @data.DateTime.ToLongDateString() @data.DateTime.ToShortTimeString()</small>
+                                                 </div>
+                                            </div>
+                                        </div>
+                                   
+                                      
+                                    }
+
+
+                        </div>
+                   
+
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

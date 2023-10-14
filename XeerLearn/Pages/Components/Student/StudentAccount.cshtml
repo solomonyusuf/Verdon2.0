@@ -1,0 +1,214 @@
+﻿@page "/student-account"
+@using Microsoft.EntityFrameworkCore;
+@model XeerLearn.Pages.Components.Student.StudentAccountModel
+@inject ApplicationDbContext _context;
+@{
+    Layout = "_MainLayout";
+}
+
+     <div class="col-md-12">
+        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+        <li class="nav-item">
+            <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Account</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/access-transaction">
+                <i class="bx bx-money me-1"></i> Transactions</a>
+        </li>
+        </ul>
+     </div>
+<div class="card mb-4">
+    <h5 class="card-header">Profile Details</h5>
+    <!-- Account -->
+    <form method="post" class="card-body" enctype="multipart/form-data">
+        <div class="d-flex align-items-start align-items-sm-center gap-4">
+            <img src="@Model.user.Image"
+                 alt="user-avatar"
+                 class="d-block rounded"
+                 height="100"
+                 width="100"
+                 id="uploadedAvatar" />
+            <div class="button-wrapper">
+                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                    <span class="d-none d-sm-block">Upload new photo</span>
+                    <i class="bx bx-upload d-block d-sm-none"></i>
+                    <input type="file"
+                           id="upload"
+                           class="account-file-input"
+                           hidden
+                           asp-for="image"
+                           accept="image/png, image/jpg, image/jpeg" />
+                </label>
+
+                <p class="text-muted mb-0">Allowed JPG, JPEG or PNG. Max size of 3MB</p>
+            </div>
+        </div>
+        <br />
+       <hr class="my-0" />
+        <br />
+        <div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="firstName" class="form-label">Initials</label>
+                    <input class="form-control"
+                           type="text"
+                           id="firstName"
+                           asp-for="user.Initials"
+                           value="@Model.user.Initials"
+                           autofocus />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input class="form-control"
+                           type="text"
+                           id="firstName"
+                           asp-for="user.FirstName"
+                           value="@Model.user.FirstName"
+                           autofocus />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="firstName" class="form-label">Middle Name</label>
+                    <input class="form-control"
+                           type="text"
+                           id="firstName"
+                           asp-for="user.MiddleName"
+                           value="@Model.user.MiddleName"
+                           autofocus />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input class="form-control" asp-for="user.LastName" type="text" value="@Model.user.LastName" id="lastName" />
+                    <input hidden class="form-control" type="text" asp-for="type" value="account" />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input class="form-control"
+                           type="text"
+                           id="email"
+                           disabled
+                           asp-for="user.Email"
+                           value="@Model.user.Email"
+                           />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="phoneNumber">Phone Number</label>
+                    <div class="input-group input-group-merge">
+                        <input type="text"
+                               id="phoneNumber"
+                               asp-for="user.PhoneNumber"
+                               value="@Model.user.PhoneNumber"
+                               class="form-control"
+                                />
+                    </div>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" asp-for="user.Address" class="form-control" id="address" value="@Model.user.Address"  placeholder="Address" />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="country">Country</label>
+                    <select asp-for="user.Country" id="countrySelect" class=" countries select2 form-select" value="@Model.user.Country">
+                        <option value="">Select</option>
+                        @foreach (var item in Model.country)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="country">State/Province</label>
+                    <input type="text" asp-for="user.State" class="form-control" id="address" value="@Model.user.State"  placeholder="State" />
+                </div>
+                
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="country">Matric No</label>
+                    <input type="text" asp-for="user.Matric" class="form-control" id="address" value="@Model.user.Matric"  placeholder="Matric No" />
+                </div>
+                
+                
+            </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary me-2">Save changes</button>
+   
+            </div>
+        </div>
+            
+    </form>
+    <!-- /Account -->
+</div>
+<div class="card mb-4">
+    <h5 class="card-header">Change Password</h5>
+    <!-- Account -->
+    <div class="card-body">
+        <form method="post">
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="firstName" class="form-label">New Password</label>
+                    <input hidden class="form-control" type="text" asp-for="type" value="password" id="lastName" />
+
+                    <input class="form-control"
+                           type="password"
+                           id="firstName"
+                           required
+                           placeholder="New Password here"
+                           asp-for="new_password"
+                           autofocus />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="firstName" class="form-label">Confirm Password</label>
+                    <input class="form-control"
+                           type="password"
+                           id="firstName"
+                           required
+                           placeholder="Confirm Password here"
+                           asp-for="confirm_password"
+                           autofocus />
+                </div>
+                
+            </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary me-2">Change Password</button>
+   
+            </div>
+        </form>
+    </div>
+    <!-- /Account -->
+</div> 
+<div class="card  mb-4">
+    <h5 class="card-header">Access Key</h5>
+    <div class="card-body">
+        <div class="mb-3 col-12 mb-0">
+            <div class="alert alert-success">
+                <code class="mb-0"> @_context.AccessKeys.Where(x=> x.Id == _context.UserAccess.Where(x=> x.XeerLearnUserId == Model.user.Id).First().AccessKeyId).First().Name</code><br />
+                <code class="mb-0"> @_context.UserAccess.Where(x=> x.XeerLearnUserId == Model.user.Id).First().AccessKeyId.ToString()</code><br/>
+                <strong class="mb-0"> Expiry date - @_context.UserAccess.Where(x=> x.XeerLearnUserId == Model.user.Id).First().ExpiryDate.ToLongDateString()</strong>
+            </div>
+        </div>
+</div>
+</div>
+<div class="card  mb-4">
+    <h5 class="card-header">Delete Account</h5>
+    <div class="card-body">
+        <div class="mb-3 col-12 mb-0">
+            <div class="alert alert-warning">
+                <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your account?</h6>
+                <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
+            </div>
+        </div>
+        <form method="post">
+            <div class="form-check mb-3">
+                <input class="form-check-input"
+                       type="checkbox"
+                       required
+                       id="accountActivation" />
+                <input hidden class="form-control" type="text" asp-for="type" value="deactivate" id="lastName" />
+
+                <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
+            </div>
+            <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
+        </form>
+    </div>
+   
+</div>
+
+

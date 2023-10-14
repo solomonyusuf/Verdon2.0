@@ -1,0 +1,196 @@
+﻿@page "/tutor-modifyassignment-{Id}"
+@using XeerLearn.Models.Auth;
+@inject ApplicationDbContext _context;
+@model XeerLearn.Pages.Components.Tutor.TutorModifyAssignmentModel
+@{
+    Layout = "_MainLayout";
+    int Key = 1;
+}
+@functions{
+
+    async Task<XeerLearnUser> GetUser(string Id)
+    {
+        return await _context.User.FindAsync(Id);
+    }
+}
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Modify</span> Assignment</h4>
+
+
+<div class="row">
+    <!-- Basic Layout -->
+    <div class="col-xxl col-md-6">
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Assignment Publishing</h5>
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <form method="post">
+                        <input asp-for="type" value="publishing" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                        <label for="nameBasic" class="form-label">Publish (@Model.assignment.Published)</label>
+                        <select asp-for="publish" required class="form-control">
+                            <option>Select one</option>
+                            <option value="True">True</option>
+                            <option value="False">False</option>
+                        </select>
+                        <button style="margin:8px;" type="submit" class="btn btn-primary">Publish</button>
+                    </form>
+                </div>
+            </div>
+                    <div class="card-body">
+                        <h5>Assignment Detail</h5>
+                <form method="post">
+                  
+                    <div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Name</label>
+                                <input asp-for="assignment.Title" type="text" id="nameBasic" class="form-control" placeholder="Enter Title" />
+                                <input asp-for="assignment.XeerLearnUserId" value="@Model.assignment.XeerLearnUserId" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                                <input asp-for="assignment.Published" value="@Model.assignment.Published" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                                <input asp-for="type" value="assignment" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Description</label>
+                                <textarea asp-for="assignment.Description" type="text" id="nameBasic" class="form-control" placeholder="Enter Assignment Here">@Model.assignment.Description</textarea>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Total Score</label>
+                                <input asp-for="assignment.TotalScore" type="text" id="nameBasic" class="form-control" placeholder="Enter Total Score" />
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Assignment Due Date</label>
+                                <input asp-for="assignment.DueDate" type="datetime-local" id="nameBasic" class="form-control" />
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+                    </div>
+
+                </div>
+                    </div>
+                </div>
+          
+    <!-- Basic with Icons -->
+<div class="col-xxl col-md-6">
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Assignment Response</h5>
+                <small class="text-muted float-end">grade assignments</small>
+            </div>
+            <div class="card-body">
+            @if (Model.responses.Count() == 0)
+            {
+                
+                <div class="card-title d-flex align-items-start">
+                    <img align="center" src="~/blank.png" style="height:100px;" />
+                </div>
+                   
+            }
+            @if (Model.responses.Count() > 0)
+            {
+
+                <div class="card">
+                    <h5 class="card-header"> <button class="btn btn-primary">Export</button></h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-nowrap">
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var data in Model.responses)
+                                {
+                                    <tr>
+                                        <th scope="row">@(Key++)</th>
+                                        <td><img style="height:100px;" src="@GetUser(data.XeerLearnUserId).Result.Image" /> @GetUser(data.XeerLearnUserId).Result.FirstName @GetUser(data.XeerLearnUserId).Result.LastName</td>
+                                        <td>@data.DateTime.ToShortDateString() @data.DateTime.ToShortTimeString()</td>
+                                        <td>
+                                            <button type="button"
+                                                    class="btn btn-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#@data.Id">
+                                                Grade
+                                            </button>
+                                            <div class="modal fade" id="@data.Id" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <form method="post" class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel1">Grade Assignment</h5>
+                                                            <button type="button"
+                                                                    class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col mb-3">
+                                                                    <label for="nameBasic" class="form-label">Score</label>
+                                                                    <input asp-for="result.Score" type="text" id="nameBasic" class="form-control" placeholder="Enter Score" />
+                                                                    <input asp-for="result.XeerLearnUserId" value="@Model.assignment.XeerLearnUserId" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                                                                    <input asp-for="result.AssignmentId" value="@Model.assignment.Id" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                                                                    <input asp-for="type" value="grade" hidden type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                                                                </div>
+
+                                                            </div>
+                                                          
+                                                            <div class="row">
+                                                                <div class="col mb-3">
+                                                                    <label for="nameBasic" class="form-label">Total Score</label>
+                                                                    <input asp-for="result.TotalScore" type="text" id="nameBasic" class="form-control" placeholder="Enter Total Score" />
+                                                                </div>
+
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            }
+            </div>
+        </div>
+    </div>
+</div>
+          
+
+
+
+   

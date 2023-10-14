@@ -1,0 +1,54 @@
+﻿@page "/generate-access_key/{Id}"
+@model XeerLearn.Areas.Identity.Pages.GenerateAccessKeyModel
+@{
+    Layout = "_Layout";
+}
+@*<div class="container align-self-center mb-4" style="margin-top:100px;">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="rbt-contact-form contact-form-style-1 max-width-auto">
+                <h3 class="title">Existing Access Key</h3>
+                <form method="post" class="max-width-auto">
+
+                    <div class="form-group">
+                        <input required asp-for="AccessKey.Name" type="text" placeholder="Paste Existing Key" />
+                        <input asp-for="type" hidden value="existing" type="text" placeholder="Enter New AccessKey Name" />                        <span class="focus-border"></span>
+                    </div>
+
+                    <div class="form-submit-group">
+                        <button type="submit" class="rbt-btn btn-md btn-gradient hover-icon-reverse w-100">
+                            <span class="icon-reverse-wrapper">
+                                <span class="btn-text">Save Changes</span>
+                                <span class="btn-icon"><i class="feather-arrow-right"></i></span>
+                                <span class="btn-icon"><i class="feather-arrow-right"></i></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="rbt-contact-form contact-form-style-1 max-width-auto">
+                <h3 class="title">Generate New Access Key</h3>
+                <form method="post" class="max-width-auto">
+
+                    <div class="form-group">
+                        <input asp-for="AccessKey.Name" type="text" placeholder="Enter New AccessKey Name" />
+                        <input asp-for="type" hidden value="generate" type="text" placeholder="Enter New AccessKey Name" />
+                        <span class="focus-border"></span>
+                    </div>
+
+                    <div class="form-submit-group">
+                        <button type="submit" class="rbt-btn btn-md btn-gradient hover-icon-reverse w-100">
+                            <span class="icon-reverse-wrapper">
+                                <span class="btn-text">Generate Key</span>
+                                <span class="btn-icon"><i class="feather-arrow-right"></i></span>
+                                <span class="btn-icon"><i class="feather-arrow-right"></i></span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>*@

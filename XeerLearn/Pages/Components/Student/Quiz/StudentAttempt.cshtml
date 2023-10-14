@@ -1,0 +1,115 @@
+﻿@page "/begin-quiz-{Id}"
+@using XeerLearn.Models.Auth;
+@inject ApplicationDbContext _context;
+@model XeerLearn.Pages.Components.Student.Quiz.StudentAttemptModel
+@{
+    Layout = "_QuizLayout";
+    int Key = 1;
+}
+
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Student</span> Quiz</h4>
+
+
+<div class="row">
+    <!-- Basic Layout -->
+    <div class="col-xxl col-md-8">
+        <div class="card mb-4 ">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="mb-0">Quiz</h5>
+                <div class="mb-3">
+                    <h3 id="timeRemaining">--:--</h3>
+                </div>
+            </div>
+         </div>
+
+        <form method="post" class="card-body" style="height:500px;overflow:scroll;">
+            @foreach (var data in @Model.questions)
+            {
+                <div class="row" style="border:solid;padding:20px;margin:5px;border-width:3px;">
+                    <div class="col-md-1">
+                        @(Key++)
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            @data.Content
+                        </div>
+                        <div class="row">
+                            @foreach (var item in _context.Options.Where(x => x.QuestionId == data.Id).OrderBy(x => x.Alphabet).ToList())
+                            {
+                                <p>(@item.Alphabet)&nbsp;@item.Content</p>
+                            }
+                            <div class="mb-4">
+                                <select class="form-control" name="options[]">
+                                    @foreach (var item in _context.Options.Where(x => x.QuestionId == data.Id).OrderBy(x => x.Alphabet).ToList())
+                                    {
+                                        <option value="@item.Alphabet">(@item.Alphabet)&nbsp;@item.Content</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <br />
+            }
+            <input hidden name="access_key" value="@Model.quiz.AccessKeyId"/>
+            <input hidden name="static_score" value="@(Model.questions.Count() * Model.quiz.PointScore)" />
+            <button id="submitQuizButton" class="mb-4 btn btn-primary w-100">Submit</button>
+        </form>
+
+       
+    </div>
+          
+    <!-- Basic with Icons -->
+    <div class="col-xxl col-md-4">
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h4 class="mb-0">Student</h4>
+                <small class="text-muted float-end">Participant</small>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="mb-3">
+                        <div align="center" class="d-flex align-items-center align-items-sm-center gap-4">
+                            <img src="@Model.user.Image"
+                                 alt="user-avatar"
+                                 class="d-block rounded"
+                                 height="100"
+                                 width="100"
+                                 id="uploadedAvatar" />
+
+                        </div>
+                    </div>
+                    <div>
+                        <h4> @Model.user.FirstName&nbsp;@Model.user.LastName</h4>
+                    </div>
+                    <div>
+                        <strong id="quiztime" hidden>
+                            @((Model.quiz.StartTime.AddMinutes(Model.quiz.Duration) - DateTime.Now).Minutes)
+                            
+                        </strong>
+                        <strong>
+                            @(Model.quiz.Duration)
+                            
+                        </strong>
+                    <strong>&nbsp;Minutes</strong>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">@Model.user.Email</small>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">@Model.user.Matric</small>
+                    </div><br/>
+                    <div class="mb-3">
+                        <h3 id="timeRemaining2">--:--</h3>
+                    </div>
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>          
+
+   

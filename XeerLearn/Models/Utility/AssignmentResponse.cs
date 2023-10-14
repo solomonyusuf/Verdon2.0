@@ -1,0 +1,23 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace XeerLearn.Models.Utility
+{
+#nullable disable
+    public class AssignmentResponse
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public Guid AccessKeyId { get; set; }
+        public Guid AssignmentId { get; set; }
+        public string XeerLearnUserId { get; set; }
+        public long Response { get; set; }
+        public DateTime DateTime { get; set; }
+
+
+        public AssignmentResponse()
+        {
+            Id = Guid.Parse(Guid.NewGuid().ToString("N"));
+            DateTime = DateTime.Now;
+        }
+    }
+}
