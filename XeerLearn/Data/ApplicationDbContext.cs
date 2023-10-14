@@ -43,11 +43,11 @@ namespace XeerLearn.Data
         {
 
 
-/*            if (Database.EnsureCreatedAsync().IsCompletedSuccessfully)
+            if (Database.EnsureCreatedAsync().IsCompletedSuccessfully)
             {
                 if (Database.GetPendingMigrationsAsync().Result.Count() > 0)
                     Database.MigrateAsync();
-            }*/
+            }
         }
     }
 }
