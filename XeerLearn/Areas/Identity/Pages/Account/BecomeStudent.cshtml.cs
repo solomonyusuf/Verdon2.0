@@ -112,6 +112,11 @@ namespace XeerLearn.Areas.Identity.Pages.Account
         {
            if(type == "register")
             {
+                if (AccessKey != null && AccessName != null)
+                {
+                    _toast.AddWarningToastMessage("Paste an access key or enter name for new access key, only one choice.");
+                    return Redirect("/become-tutor");
+                }
                 if (AccessKey != null)
                 {
                     var acc = await _context.AccessKeys.FindAsync(Guid.Parse(AccessKey));

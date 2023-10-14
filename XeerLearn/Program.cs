@@ -72,7 +72,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.Name = "Cookie";
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(500);
-    options.LoginPath = new PathString("/login");
+    options.LoginPath = new PathString("/become-student");
     options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
     options.SlidingExpiration = true;
 });
@@ -122,6 +122,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("CorsPolicy");
 app.MapRazorPages();
-app.MapFallbackToPage("/Index");
 //app.UseAccessKeyMiddleware();
 app.Run();

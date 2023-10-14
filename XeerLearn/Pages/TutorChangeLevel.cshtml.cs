@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NToastNotify;
 using XeerLearn.Data;
 
-namespace XeerLearn.Areas.Identity.Pages.Account
+namespace XeerLearn.Pages
 {
     [Authorize(Roles = "Tutor")]
     public class TutorChangeLevelModel : PageModel
@@ -34,10 +34,10 @@ namespace XeerLearn.Areas.Identity.Pages.Account
             {
 
                 var input = Request.Form["level"].ToString();
-                if (input == null)
+                if (input == "0")
                 {
                     _toast.AddErrorToastMessage("Select a level to tutor");
-                    return Redirect($"/change-level/{Id}");
+                    return Redirect($"/choose-teaching-level/{Id}");
                 }
                 
                 var user = await _userManager.FindByEmailAsync(User.Identity.Name);

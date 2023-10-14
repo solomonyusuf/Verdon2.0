@@ -1,11 +1,12 @@
-﻿@page "/change-level/{Id}"
+﻿@page "/choose-teaching-level/{Id}"
 @using XeerLearn.Data;
 @using XeerLearn.Models.Auth;
-@model XeerLearn.Areas.Identity.Pages.Account.TutorChangeLevelModel
+@model XeerLearn.Pages.TutorChangeLevelModel
 @inject ApplicationDbContext _context
 @inject UserManager<XeerLearnUser> _manager
 @{
     var user = await _manager.FindByEmailAsync(User.Identity.Name);
+    Layout = "_QuizLayout";
 }
 <div class="container align-self-center mb-4" style="margin-top:100px;">
     <div class="row">
@@ -16,7 +17,7 @@
                  
                     <div class="form-group">
                         <select class="form-control-lg form-control" name="level">
-                            <option>Select level</option>
+                            <option value="0">Select level</option>
                             @foreach(var data in _context.UserAccess.Where(x=> x.XeerLearnUserId == user.Id).ToList())
                             {
                                 <option value="@data.AccessKeyId">@_context.AccessKeys.FindAsync(data.AccessKeyId).Result.Name</option>

@@ -122,6 +122,11 @@ namespace XeerLearn.Areas.Identity.Pages.Account
             {
                 if (type == "register")
                 {
+                    if (AccessKey != null && AccessName != null)
+                    {
+                        _toast.AddWarningToastMessage("Paste an access key or enter name for new access key, only one choice.");
+                        return Redirect("/become-tutor");
+                    }
                     if (AccessKey != null)
                     {
                         var acc = await _context.AccessKeys.FindAsync(Guid.Parse(AccessKey));
@@ -276,7 +281,7 @@ namespace XeerLearn.Areas.Identity.Pages.Account
 
                         _toast.AddSuccessToastMessage("Select level to tutor");
 
-                        return Redirect($"/change-level/{user.Id}");
+                        return Redirect($"/choose-teaching-level/{user.Id}");
                     }
                     if (result.IsLockedOut)
                     {
@@ -296,7 +301,7 @@ namespace XeerLearn.Areas.Identity.Pages.Account
                 Console.WriteLine(ex);
             }
 
-            return Redirect($"/change-level/{user.Id}");
+            return Redirect($"/choose-teaching-level/{user.Id}");
         }
   
     }

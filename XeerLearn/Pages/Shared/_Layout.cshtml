@@ -237,7 +237,7 @@
                                                     <ul class="mega-menu-item">
                                                         @if(User.IsInRole("Tutor"))
                                                         {
-                                                              <li><a href="/change-level/@(_manager.FindByEmailAsync(User.Identity.Name).Result.Id)">Tutor Page </a></li>
+                                                                <li><a href="/choose-teaching-level/@(_manager.FindByEmailAsync(User.Identity.Name).Result.Id)">Tutor Page </a></li>
                                                         
                                                         }
                                                         @if(User.IsInRole("Student"))
@@ -334,7 +334,7 @@
                                        <ul class="mega-menu-item">
                                                         @if(User.IsInRole("Tutor"))
                                                         {
-                                                    <li><a href="/change-level/@(_manager.FindByEmailAsync(User.Identity.Name).Result.Id)">Tutor Page </a></li>
+                                                    <li><a href="/choose-teaching-level/@(_manager.FindByEmailAsync(User.Identity.Name).Result.Id)">Tutor Page </a></li>
                                                         
                                                         }
                                                         @if (User.IsInRole("Student"))
